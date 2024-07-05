@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	// _ "Tasks/api/docs"
+	_ "Tasks/api/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
