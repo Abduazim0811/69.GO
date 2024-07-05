@@ -7,3 +7,11 @@ type Task struct{
 	Description string 		`json:"description"`
 	Done 		bool  		`json:"done"` 
 }
+
+type StandartError struct{
+	Error error `json:"error"`
+}
+
+type ForbiddenError struct{
+	Message string `json:"message"`
+}

@@ -16,3 +16,8 @@ migrate_force:
 migrate_file:
 	migrate create -ext sql -dir migrations -seq gin
 
+SWAG_BIN=$(GOPATH)/bin/swag
+
+swag-gen:
+	$(SWAG_BIN) init -g ./api/router.go -o api/docs
+
