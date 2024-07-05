@@ -23,6 +23,50 @@ const docTemplate = `{
                     }
                 ],
                 "description": "This method gets tasks",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TASK Tag"
+                ],
+                "summary": "GET TASKS",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.StandartError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.ForbiddenError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.StandartError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This method put tasks",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,7 +76,7 @@ const docTemplate = `{
                 "tags": [
                     "TASK Tag"
                 ],
-                "summary": "GET TASKS",
+                "summary": "put TASKS",
                 "parameters": [
                     {
                         "type": "integer",
@@ -46,10 +90,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
+                            "$ref": "#/definitions/models.Task"
                         }
                     },
                     "400": {
@@ -126,6 +167,60 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This method delete tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TASK Tag"
+                ],
+                "summary": "delte TASKS",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.StandartError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.ForbiddenError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.StandartError"
+                        }
+                    }
+                }
             }
         }
     },
@@ -181,8 +276,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This swagger UI was created in lesson",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
+	// LeftDelim:        "{{",
+	// RightDelim:       "}}",
 }
 
 func init() {

@@ -26,16 +26,43 @@ info:
   version: "1.0"
 paths:
   /tasks:
-    get:
+    delete:
       consumes:
       - application/json
-      description: This method gets tasks
+      description: This method delete tasks
       parameters:
       - description: ID
         in: query
         name: id
         required: true
         type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.StandartError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.StandartError'
+      security:
+      - BearerAuth: []
+      summary: delte TASKS
+      tags:
+      - TASK Tag
+    get:
+      description: This method gets tasks
       produces:
       - application/json
       responses:
@@ -97,6 +124,40 @@ paths:
       summary: CREATE TASKS
       tags:
       - TASK
+    put:
+      consumes:
+      - application/json
+      description: This method put tasks
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.StandartError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.ForbiddenError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.StandartError'
+      security:
+      - BearerAuth: []
+      summary: put TASKS
+      tags:
+      - TASK Tag
 securityDefinitions:
   Bearerauth:
     in: header

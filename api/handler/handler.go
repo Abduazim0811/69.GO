@@ -82,49 +82,81 @@ func (h *TaskHandler) GetTaskByID(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
-// func (h *TaskHandler) GetTasks(c *gin.Context) {
-// 	tasks, err := h.taskService.StoreGetTasks()
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, tasks)
-// }
+// @Router 			/tasks [get]
+// @Summary			GET TASKS
+// @Description 	This method gets tasks
+// @Security		BearerAuth
+// @Tags			TASK Tag
+// @Produce			json
+// @Success			201  {object} []models.Task
+// @Failure			400  {object} models.StandartError
+// @Failure			403  {object} models.ForbiddenError
+// @Failure			500  {object} models.StandartError
+func (h *TaskHandler) GetTasks(c *gin.Context) {
+	tasks, err := h.taskService.StoreGetTasks()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, tasks)
+}
+// @Router 			/tasks [put]
+// @Summary			put TASKS
+// @Description 	This method put tasks
+// @Security		BearerAuth
+// @Tags			TASK Tag
+// @Accept 			json
+// @Produce			json
+// @Param 			id query int true "ID"
+// @Success			201  {object} models.Task
+// @Failure			400  {object} models.StandartError
+// @Failure			403  {object} models.ForbiddenError
+// @Failure			500  {object} models.StandartError
+func (h *TaskHandler) UpdateTask(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
 
-// func (h *TaskHandler) UpdateTask(c *gin.Context) {
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
-// 		return
-// 	}
+	var task models.Task
+	if err := c.ShouldBindJSON(&task); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	task.ID = int32(id)
 
-// 	var task models.Task
-// 	if err := c.ShouldBindJSON(&task); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-// 		return
-// 	}
-// 	task.ID = int32(id)
+	updatedTask, err := h.taskService.StoreUpdateTask(&task)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	updatedTask, err := h.taskService.StoreUpdateTask(&task)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	c.JSON(http.StatusOK, updatedTask)
+}
+// @Router 			/tasks [delete]
+// @Summary			delte TASKS
+// @Description 	This method delete tasks
+// @Security		BearerAuth
+// @Tags			TASK Tag
+// @Accept 			json
+// @Produce			json
+// @Param 			id query int true "ID"
+// @Success			201  {object} map[string]any
+// @Failure			400  {object} models.StandartError
+// @Failure			403  {object} models.ForbiddenError
+// @Failure			500  {object} models.StandartError
+func (h *TaskHandler) DeleteTask(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
 
-// 	c.JSON(http.StatusOK, updatedTask)
-// }
+	if err := h.taskService.StoreDeleteTask(int32(id)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// func (h *TaskHandler) DeleteTask(c *gin.Context) {
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
-// 		return
-// 	}
-
-// 	if err := h.taskService.StoreDeleteTask(int32(id)); err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, gin.H{"message": "Task deleted successfully"})
-// }
+	c.JSON(http.StatusOK, gin.H{"message": "Task deleted successfully"})
+}
